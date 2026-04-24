@@ -14,7 +14,7 @@ suppressPackageStartupMessages({
 })
 
 # ---------- CONFIG ----------
-PY   <- path.expand("~/Python/.venv/bin/python")
+PY   <- path.expand("/Users/prav/venv/bin/python")
 YF1H <- path.expand("~/Python/yf_1h.py")
 TMP  <- "/tmp"                          # where CSV gets saved
 

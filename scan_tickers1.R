@@ -7,7 +7,7 @@ cat("=====================================\n")
 
 # 📂 Source necessary R scripts
 source("backtest_ticker.R")
-source("flpl_live_scan.R")
+source("flpl_live_scan1.R")
 
 # ⬇️ READ TICKERS FROM FILE (NO HEADER) ⬇️
 # header = FALSE tells R that the first row is data, not column names.

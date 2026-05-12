@@ -25,8 +25,8 @@ suppressPackageStartupMessages({
   library(zoo)
 })
 
-run_flpl2 <- function(symbol   = "ASTS",
-                      from     = "2015-01-01",
+run_flpl2 <- function(symbol   = "CVNA",
+                      from     = "2020-01-01",
                       to       = Sys.Date(),
                       fastPPO  = 12,
                       slowPPO  = 26,
@@ -186,7 +186,7 @@ get_live_signal <- function(symbol, from = "2020-01-01") {
   res$open_trade
 }
 
-RUN_DEMO <- TRUE
+RUN_DEMO <- TRUE 
 
 # ------------------------------------------------------------------------------
 # OPTIONAL DEMO (runs only if you set RUN_DEMO <- TRUE before sourcing)
@@ -197,9 +197,9 @@ RUN_DEMO <- TRUE
 
 if (exists("RUN_DEMO") && isTRUE(RUN_DEMO)) {
   cat("\n========================\n")
-  cat(" DEMO: ASTS (flpl2)\n")
+  cat(" DEMO: CVNA (flpl2)\n")
   cat("========================\n")
-  res_demo <- run_flpl2("ASTS", from = "2024-01-01")
+  res_demo <- run_flpl2("CVNA", from = "2024-01-01")
   print(res_demo$trades)
   cat("\nTotal trades:", nrow(res_demo$trades), "\n")
   cat("Final equity:", round(as.numeric(last(res_demo$equity)), 2), "\n")

@@ -141,6 +141,45 @@ for (d in as.character(all_dates)) {
     for (sym in to_close) open_pos[[sym]] <- NULL
   }
 
+  # ── THURSDAY PRUNING (optional rule to test) ──────────────
+  if (weekdays(today) == "Thursday" && length(open_pos) == MAX_POSITIONS) {
+
+      # Find worst performer by unrealized %
+      perf <- sapply(names(open_pos), function(sym) {
+      ind <- indicators[[sym]]
+      idx <- which(ind$dates == today)
+      if (length(idx) == 0) return(NA)
+      last_price <- as.numeric(ind$close[idx])
+      (last_price / open_pos[[sym]]$entryPrice - 1) * 100
+      })
+
+      worst_sym <- names(which.min(perf))
+
+      # Only prune if worst performer is negative
+      if (!is.na(perf[worst_sym]) && perf[worst_sym] < 0) {
+       p <- open_pos[[worst_sym]]
+       ind <- indicators[[worst_sym]]
+       idx <- which(ind$dates == today)
+       exit_price <- as.numeric(ind$close[idx])
+       ret <- (exit_price / p$entryPrice - 1) * 100
+       cash <- cash + p$shares * exit_price
+
+       trade_log <- rbind(trade_log, data.frame(
+       Symbol     = worst_sym,
+       EntryDate  = p$entryDate,
+       EntryPrice = p$entryPrice,
+       ExitDate   = today,
+       ExitPrice  = exit_price,
+       Shares     = p$shares,
+       ReturnPct  = ret,
+       PnL        = p$shares * exit_price - POSITION_SIZE,
+       stringsAsFactors = FALSE
+       ))
+       open_pos[[worst_sym]] <- NULL
+       cat(sprintf("THURSDAY PRUNE: %s at %.2f%% return\n", worst_sym, ret))
+       }
+  }
+
   # ── B. Find ENTRY signals today ─────────────────────────────
   slots_available <- MAX_POSITIONS - length(open_pos)
 
